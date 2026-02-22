@@ -4,8 +4,15 @@
     <div class="result-header" :style="{ background: `linear-gradient(180deg, ${personality.color}15, transparent)` }">
       <div class="result-emoji">{{ personality.emoji }}</div>
       <div class="result-name">{{ personality.name }}</div>
+      <div v-if="flexibilityModifier" class="result-modifier">{{ flexibilityModifier }}</div>
       <div class="result-tagline">{{ personality.tagline }}</div>
       <div class="result-percent">全国 {{ personality.fakePercent }}% 的人和你一样</div>
+    </div>
+
+    <!-- 食格座右铭 -->
+    <div class="result-section" v-if="personality.motto">
+      <div class="result-section-title">📜 食格座右铭</div>
+      <p class="motto-text">{{ personality.motto }}</p>
     </div>
 
     <!-- 站队结果 -->
@@ -61,6 +68,12 @@
       </p>
     </div>
 
+    <!-- 纪录片时刻 -->
+    <div class="result-section" v-if="personality.documentaryMoment">
+      <div class="result-section-title">🎬 纪录片时刻</div>
+      <p style="font-size:14px;line-height:1.8;color:#8B7355">{{ personality.documentaryMoment }}</p>
+    </div>
+
     <!-- 名人同款 -->
     <div class="result-section">
       <div class="result-section-title">🌟 名人同款</div>
@@ -72,6 +85,20 @@
       <div class="result-section-title">🍽️ 饭搭子匹配</div>
       <p style="font-size:14px;color:#8B7355;margin-bottom:8px">最佳饭搭子：<strong>{{ personality.bestMatch }}</strong></p>
       <p style="font-size:14px;color:#8B7355">碰撞组合：<strong>{{ personality.clashMatch }}</strong></p>
+    </div>
+
+    <!-- 碰撞预警 -->
+    <div class="result-section" v-if="personality.clashScenarios">
+      <div class="result-section-title">💥 碰撞预警</div>
+      <p style="font-size:13px;color:#8B7355;margin-bottom:12px">和「{{ personality.clashMatch }}」一起吃饭会发生：</p>
+      <div
+        v-for="(scenario, idx) in personality.clashScenarios"
+        :key="idx"
+        class="clash-scenario"
+      >
+        <span class="clash-number">{{ idx + 1 }}</span>
+        <span class="clash-text">{{ scenario }}</span>
+      </div>
     </div>
 
     <!-- 隐藏美食搭配 -->
@@ -100,7 +127,9 @@
     <div class="share-card" ref="shareCardRef">
       <div class="result-emoji" style="font-size:56px">{{ personality.emoji }}</div>
       <div class="share-card-name" :style="{ color: personality.color }">{{ personality.name }}</div>
+      <div v-if="flexibilityModifier" style="font-size:12px;color:#FF6B35;font-weight:600;margin-top:4px">{{ flexibilityModifier }}</div>
       <div class="share-card-tagline">{{ personality.tagline }}</div>
+      <div v-if="personality.motto" style="font-size:11px;color:#B8A692;margin:12px 20px 0;line-height:1.5;font-style:italic">{{ personality.motto }}</div>
       <div style="margin:20px 0;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
         <span
           v-for="stance in stanceChoices"
@@ -125,7 +154,8 @@ const props = defineProps({
   personality: { type: Object, required: true },
   stanceChoices: { type: Array, required: true },
   tasteOpenness: { type: Number, required: true },
-  dimensionDisplay: { type: Array, required: true }
+  dimensionDisplay: { type: Array, required: true },
+  flexibilityModifier: { type: String, default: null },
 })
 
 defineEmits(['share', 'restart'])

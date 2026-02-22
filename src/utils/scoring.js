@@ -3,7 +3,7 @@
  *
  * Processes answers from 3 question sections:
  *   - Section 1 (stance): Binary choices, no scoring
- *   - Section 2 (personality): Scores across 4 dimension pairs
+ *   - Section 2 (personality): Scores across 4 dimension pairs + flexibility tracking
  *   - Section 3 (inspiration): Taste openness measurement
  */
 
@@ -38,7 +38,8 @@ const DIMENSION_LABELS = [
  * @returns {{
  *   dimensions: Object,
  *   tasteOpenness: number,
- *   stanceChoices: Array
+ *   stanceChoices: Array,
+ *   flexibilityRate: number
  * }}
  */
 export function calculateScores(answers, questions) {
@@ -55,6 +56,8 @@ export function calculateScores(answers, questions) {
 
   const stanceChoices = [];
   let openOrPioneerCount = 0;
+  let flexibleCount = 0;
+  let personalityQuestionCount = 0;
 
   for (const question of questions) {
     const selectedOptionId = answers[question.id];
@@ -73,12 +76,16 @@ export function calculateScores(answers, questions) {
         fakeStat: selectedOption.fakeStat,
       });
     } else if (question.section === 'personality') {
+      personalityQuestionCount++;
       if (selectedOption.scores) {
         for (const [dimension, value] of Object.entries(selectedOption.scores)) {
           if (dimension in dimensions) {
             dimensions[dimension] += value;
           }
         }
+      }
+      if (selectedOption.flexible) {
+        flexibleCount++;
       }
     } else if (question.section === 'inspiration') {
       if (selectedOption.type === 'open' || selectedOption.type === 'pioneer') {
@@ -96,7 +103,30 @@ export function calculateScores(answers, questions) {
     tasteOpenness = 90;
   }
 
-  return { dimensions, tasteOpenness, stanceChoices };
+  const flexibilityRate = personalityQuestionCount > 0
+    ? flexibleCount / personalityQuestionCount
+    : 0;
+
+  return { dimensions, tasteOpenness, stanceChoices, flexibilityRate };
+}
+
+/**
+ * Get flexibility modifier text based on flexibility rate.
+ *
+ * When a user frequently chooses "看情况/都喜欢" type options (marked flexible),
+ * they get a modifier label. This solves the "four dimensions tied" problem.
+ *
+ * @param {number} flexibilityRate - Ratio of flexible choices (0-1).
+ * @returns {string|null} Modifier text, or null if not applicable.
+ */
+export function getFlexibilityModifier(flexibilityRate) {
+  if (flexibilityRate > 0.6) {
+    return '百变食神';
+  }
+  if (flexibilityRate > 0.4) {
+    return '随性派';
+  }
+  return null;
 }
 
 /**
