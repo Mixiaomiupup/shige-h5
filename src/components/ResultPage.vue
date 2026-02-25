@@ -15,20 +15,6 @@
       <p class="motto-text">{{ personality.motto }}</p>
     </div>
 
-    <!-- 站队结果 -->
-    <div class="result-section">
-      <div class="result-section-title">⚔️ 你的站队</div>
-      <div class="stance-summary">
-        <span
-          v-for="stance in stanceChoices"
-          :key="stance.questionId"
-          class="stance-tag"
-        >
-          {{ stance.topic }}：{{ stance.chosenText }}
-        </span>
-      </div>
-    </div>
-
     <!-- 味觉开放度 -->
     <div class="result-section">
       <div class="result-section-title">✨ 味觉开放度</div>
@@ -130,18 +116,8 @@
       <div v-if="flexibilityModifier" style="font-size:12px;color:#FF6B35;font-weight:600;margin-top:4px">{{ flexibilityModifier }}</div>
       <div class="share-card-tagline">{{ personality.tagline }}</div>
       <div v-if="personality.motto" style="font-size:11px;color:#B8A692;margin:12px 20px 0;line-height:1.5;font-style:italic">{{ personality.motto }}</div>
-      <div style="margin:20px 0;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-        <span
-          v-for="stance in stanceChoices"
-          :key="stance.questionId"
-          class="stance-tag"
-          style="font-size:11px;padding:4px 10px"
-        >
-          {{ stance.topic }}：{{ stance.chosenText }}
-        </span>
-      </div>
-      <div style="font-size:13px;color:#8B7355;margin-bottom:4px">味觉开放度 {{ tasteOpenness }}%</div>
-      <div class="share-card-qr">扫码测你的食格 ↑</div>
+      <div style="font-size:13px;color:#8B7355;margin:20px 0 4px">味觉开放度 {{ tasteOpenness }}%</div>
+      <div class="share-card-qr">长按保存分享给朋友</div>
       <div class="share-card-brand">灵感验证局 #001 · 食格测试</div>
     </div>
   </div>
@@ -152,7 +128,6 @@ import { computed, ref } from 'vue'
 
 const props = defineProps({
   personality: { type: Object, required: true },
-  stanceChoices: { type: Array, required: true },
   tasteOpenness: { type: Number, required: true },
   dimensionDisplay: { type: Array, required: true },
   flexibilityModifier: { type: String, default: null },
@@ -163,8 +138,8 @@ defineEmits(['share', 'restart'])
 const shareCardRef = ref(null)
 
 const tasteLabel = computed(() => {
-  if (props.tasteOpenness <= 20) return '味觉保守派'
-  if (props.tasteOpenness <= 60) return '有探索精神'
+  if (props.tasteOpenness <= 25) return '味觉保守派'
+  if (props.tasteOpenness <= 50) return '有探索精神'
   return '味觉先锋'
 })
 

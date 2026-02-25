@@ -256,67 +256,6 @@ button {
   color: var(--color-text);
 }
 
-/* ----- Stance Question Options ----- */
-.stance-options {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.stance-option {
-  padding: 20px;
-  background: var(--color-bg-card);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: left;
-}
-
-.stance-option:active,
-.stance-option.selected {
-  border-color: var(--color-primary);
-  background: rgba(255, 107, 53, 0.05);
-  transform: scale(0.98);
-}
-
-.stance-option-text {
-  font-size: 17px;
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: var(--color-text);
-}
-
-.stance-option-desc {
-  font-size: 13px;
-  color: var(--color-text-secondary);
-  line-height: 1.4;
-}
-
-.stance-stat {
-  margin-top: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--color-text-secondary);
-}
-
-.stance-stat-bar {
-  flex: 1;
-  height: 6px;
-  background: var(--color-border);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.stance-stat-fill {
-  height: 100%;
-  background: var(--color-primary);
-  border-radius: 3px;
-  transition: width 0.8s ease;
-}
-
 /* ----- Personality Question Options ----- */
 .personality-options {
   display: flex;
@@ -522,22 +461,6 @@ button {
   align-items: center;
   gap: 8px;
   color: var(--color-text);
-}
-
-/* ----- Stance Summary ----- */
-.stance-summary {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.stance-tag {
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-  background: rgba(255, 107, 53, 0.08);
-  color: var(--color-primary);
 }
 
 /* ----- Taste Openness ----- */

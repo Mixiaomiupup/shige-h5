@@ -1,12 +1,7 @@
 export const sectionInfo = {
-  stance: {
-    name: '食界站队',
-    desc: '每一道都不只是口味之争，更是灵魂拷问',
-    icon: '⚔️',
-  },
   personality: {
     name: '食性探测',
-    desc: '十二个真实场景，解码你的饮食人格',
+    desc: '十七个真实场景，解码你的饮食人格',
     icon: '🔍',
   },
   inspiration: {
@@ -17,104 +12,147 @@ export const sectionInfo = {
 };
 
 export const questions = [
-  // ==================== SECTION 1: 食界站队 (stance) ====================
+  // ==================== SECTION 1: 食性探测 (personality) — 场景入门篇 ====================
   {
     id: 1,
-    section: 'stance',
-    topic: '火锅蘸料',
+    section: 'personality',
+    text: '周五晚上，朋友约你吃饭，你脑海里第一个画面是：',
     options: [
       {
         id: 'A',
-        text: '麻酱碟',
-        desc: '铜锅涮肉配麻酱韭花腐乳，锅底清淡蘸料补味，这才叫吃火锅',
-        fakeStat: 48,
+        text: '楼下那家吃了三年的小馆子，熟悉的味道最踏实',
+        scores: { nostalgic: 2, social: 1 },
       },
       {
         id: 'B',
-        text: '油碟',
-        desc: '蒜泥香油才能让红油锅底的鲜辣落地，蘸料是做减法不是加法',
-        fakeStat: 52,
+        text: '上次刷到的那家没去过的新店，正好试试',
+        scores: { adventurous: 2, social: 1 },
+      },
+      {
+        id: 'C',
+        text: '不想出门，自己点个外卖窝沙发上',
+        scores: { solo: 2, indulgent: 1 },
+      },
+      {
+        id: 'D',
+        text: '得看是谁约——人对了，路边摊也开心',
+        scores: { social: 2, nostalgic: 1 },
+        flexible: true,
       },
     ],
   },
   {
     id: 2,
-    section: 'stance',
-    topic: '菜上桌了',
+    section: 'personality',
+    text: '如果可以瞬移到任意一张餐桌，你选：',
     options: [
       {
         id: 'A',
-        text: '先吃',
-        desc: '趁热吃才对得起这道菜，拍照的时间够我吃三口了',
-        fakeStat: 45,
+        text: '老家过年的年夜饭桌，一大家子热热闹闹',
+        scores: { nostalgic: 2, social: 2 },
       },
       {
         id: 'B',
-        text: '先拍',
-        desc: '不拍等于没吃。而且好看的摆盘撑不过30秒',
-        fakeStat: 55,
+        text: '东京筑地市场凌晨四点的寿司台',
+        scores: { adventurous: 2, refined: 1 },
+      },
+      {
+        id: 'C',
+        text: '成都苍蝇馆子的角落，一个人嗦完一碗面',
+        scores: { hearty: 2, solo: 1 },
+      },
+      {
+        id: 'D',
+        text: '米其林三星主厨的私人晚宴，见识顶级料理',
+        scores: { refined: 2, adventurous: 1 },
       },
     ],
   },
   {
     id: 3,
-    section: 'stance',
-    topic: '外卖差3块起送',
+    section: 'personality',
+    text: '你的冰箱突然空了，最先补货的是：',
     options: [
       {
         id: 'A',
-        text: '加个饮料凑满',
-        desc: '来都来了，不能亏了这个起送费',
-        fakeStat: 58,
+        text: '鸡蛋、酱油、葱——有这三样就饿不死',
+        scores: { hearty: 2, nostalgic: 1 },
       },
       {
         id: 'B',
-        text: '换一家不用凑',
-        desc: '为了凑单买不需要的东西，才是真的亏',
-        fakeStat: 42,
+        text: '酸奶、水果、全麦面包——吃得轻盈点',
+        scores: { refined: 2, restrained: 1 },
+      },
+      {
+        id: 'C',
+        text: '火锅底料、肥牛卷、啤酒——随时能开一锅',
+        scores: { indulgent: 2, hearty: 1 },
+      },
+      {
+        id: 'D',
+        text: '不急着买，出去吃或者点外卖也挺好',
+        scores: { adventurous: 1, indulgent: 1 },
+        flexible: true,
       },
     ],
   },
   {
     id: 4,
-    section: 'stance',
-    topic: '服务员问你能吃辣吗',
+    section: 'personality',
+    text: '你出差到一个新城市，到达酒店已经晚上九点了：',
     options: [
       {
         id: 'A',
-        text: '中辣 / 特辣',
-        desc: '不辣还叫什么吃饭？要的就是满头大汗的痛快',
-        fakeStat: 47,
+        text: '放下行李就出门，凭直觉找一家本地人多的店',
+        scores: { adventurous: 3, solo: 1 },
       },
       {
         id: 'B',
-        text: '微辣 / 不辣',
-        desc: '我是来品味道的，不是来比谁扛辣的',
-        fakeStat: 53,
+        text: '打开地图搜附近评分高的，一个人安静吃一顿',
+        scores: { solo: 2, refined: 1 },
+      },
+      {
+        id: 'C',
+        text: '问当地朋友或同事有没有推荐，顺便约一起',
+        scores: { social: 2, adventurous: 1 },
+      },
+      {
+        id: 'D',
+        text: '太累了，便利店买点吃的回房间，明天再说',
+        scores: { restrained: 2, solo: 1 },
       },
     ],
   },
   {
     id: 5,
-    section: 'stance',
-    topic: '聚餐桌上还剩最后一块肉',
+    section: 'personality',
+    text: '你的朋友圈里突然流行一种你没吃过的"黑暗料理"：',
     options: [
       {
         id: 'A',
-        text: '你夹了',
-        desc: '犹豫就会败北，肉不等人',
-        fakeStat: 41,
+        text: '排队也要试！万一真香呢',
+        scores: { adventurous: 2, indulgent: 1 },
       },
       {
         id: 'B',
-        text: '你没动',
-        desc: '万一别人也想吃呢，让一让又不会少块肉……等一下',
-        fakeStat: 59,
+        text: '等热度过了再说，不想当跟风的人',
+        scores: { restrained: 2, nostalgic: 1 },
+      },
+      {
+        id: 'C',
+        text: '先看测评，找靠谱的人推荐再决定',
+        scores: { restrained: 1, adventurous: 1 },
+        flexible: true,
+      },
+      {
+        id: 'D',
+        text: '约几个朋友一起去，踩雷也热闹',
+        scores: { social: 2, adventurous: 1 },
       },
     ],
   },
 
-  // ==================== SECTION 2: 食性探测 (personality) ====================
+  // ==================== 食性探测 — 维度深挖篇 ====================
   // --- 探味取向 (nostalgic vs adventurous) ---
   {
     id: 6,
@@ -484,25 +522,25 @@ export const questions = [
   {
     id: 19,
     section: 'inspiration',
-    combo: '饺子蘸酱油',
+    combo: '草莓 + 黑胡椒',
     options: [
       {
         id: 'A',
-        text: '饺子不蘸醋蒜还叫饺子？',
+        text: '水果就该好好当水果，别折腾了',
         type: 'conservative',
       },
       {
         id: 'B',
-        text: '听说南方人都这么吃，可以试试',
+        text: '米其林甜品好像有这种搭配，想试试',
         type: 'open',
       },
       {
         id: 'C',
-        text: '从小就蘸酱油，鲜得很',
+        text: '试过！胡椒激发出草莓更深层的甜',
         type: 'pioneer',
       },
     ],
-    reveal: '南方人的日常，北方人的不解——但它真的鲜',
+    reveal: '米其林甜品的经典技法，黑胡椒让草莓的甜变得更立体',
   },
   {
     id: 20,

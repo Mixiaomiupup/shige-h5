@@ -1,10 +1,9 @@
 /**
  * Scoring logic for the food personality quiz.
  *
- * Processes answers from 3 question sections:
- *   - Section 1 (stance): Binary choices, no scoring
- *   - Section 2 (personality): Scores across 4 dimension pairs + flexibility tracking
- *   - Section 3 (inspiration): Taste openness measurement
+ * Processes answers from 2 question sections:
+ *   - personality: Scores across 4 dimension pairs + flexibility tracking
+ *   - inspiration: Taste openness measurement
  */
 
 const DIMENSION_LABELS = [
@@ -38,7 +37,6 @@ const DIMENSION_LABELS = [
  * @returns {{
  *   dimensions: Object,
  *   tasteOpenness: number,
- *   stanceChoices: Array,
  *   flexibilityRate: number
  * }}
  */
@@ -54,7 +52,6 @@ export function calculateScores(answers, questions) {
     restrained: 0,
   };
 
-  const stanceChoices = [];
   let openOrPioneerCount = 0;
   let flexibleCount = 0;
   let personalityQuestionCount = 0;
@@ -68,14 +65,7 @@ export function calculateScores(answers, questions) {
     );
     if (!selectedOption) continue;
 
-    if (question.section === 'stance') {
-      stanceChoices.push({
-        questionId: question.id,
-        topic: question.topic,
-        chosenOption: selectedOption,
-        fakeStat: selectedOption.fakeStat,
-      });
-    } else if (question.section === 'personality') {
+    if (question.section === 'personality') {
       personalityQuestionCount++;
       if (selectedOption.scores) {
         for (const [dimension, value] of Object.entries(selectedOption.scores)) {
@@ -96,18 +86,18 @@ export function calculateScores(answers, questions) {
 
   let tasteOpenness;
   if (openOrPioneerCount <= 1) {
-    tasteOpenness = 20;
+    tasteOpenness = 25;
   } else if (openOrPioneerCount <= 3) {
-    tasteOpenness = 60;
+    tasteOpenness = 50;
   } else {
-    tasteOpenness = 90;
+    tasteOpenness = 75;
   }
 
   const flexibilityRate = personalityQuestionCount > 0
     ? flexibleCount / personalityQuestionCount
     : 0;
 
-  return { dimensions, tasteOpenness, stanceChoices, flexibilityRate };
+  return { dimensions, tasteOpenness, flexibilityRate };
 }
 
 /**
@@ -130,23 +120,43 @@ export function getFlexibilityModifier(flexibilityRate) {
 }
 
 /**
+ * Pick the dominant trait from a pair, with random tiebreak on equal scores.
+ *
+ * @param {number} leftScore - Score for the left trait.
+ * @param {number} rightScore - Score for the right trait.
+ * @param {string} leftKey - Key for the left trait.
+ * @param {string} rightKey - Key for the right trait.
+ * @returns {string} The dominant trait key.
+ */
+function pickDominant(leftScore, rightScore, leftKey, rightKey) {
+  if (leftScore > rightScore) return leftKey;
+  if (rightScore > leftScore) return rightKey;
+  return Math.random() < 0.5 ? leftKey : rightKey;
+}
+
+/**
  * Derive the personality key string from dimension scores.
  *
  * Compares each dimension pair and picks the dominant trait.
+ * On ties, randomly picks one side to avoid systematic bias.
  * Returns a hyphen-separated key like "nostalgic-hearty-social-indulgent".
  *
  * @param {Object} dimensions - Scores for all 8 dimension traits.
  * @returns {string} Personality key.
  */
 export function getPersonalityKey(dimensions) {
-  const explore =
-    dimensions.nostalgic >= dimensions.adventurous ? 'nostalgic' : 'adventurous';
-  const taste =
-    dimensions.hearty >= dimensions.refined ? 'hearty' : 'refined';
-  const social =
-    dimensions.social >= dimensions.solo ? 'social' : 'solo';
-  const attitude =
-    dimensions.indulgent >= dimensions.restrained ? 'indulgent' : 'restrained';
+  const explore = pickDominant(
+    dimensions.nostalgic, dimensions.adventurous, 'nostalgic', 'adventurous'
+  );
+  const taste = pickDominant(
+    dimensions.hearty, dimensions.refined, 'hearty', 'refined'
+  );
+  const social = pickDominant(
+    dimensions.social, dimensions.solo, 'social', 'solo'
+  );
+  const attitude = pickDominant(
+    dimensions.indulgent, dimensions.restrained, 'indulgent', 'restrained'
+  );
 
   return `${explore}-${taste}-${social}-${attitude}`;
 }

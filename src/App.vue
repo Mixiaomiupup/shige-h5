@@ -24,15 +24,8 @@
       <!-- 题目 -->
       <template v-else>
         <Transition name="slide" mode="out-in">
-          <StanceQuestion
-            v-if="currentQuestion.section === 'stance'"
-            :key="currentQuestion.id"
-            :question="currentQuestion"
-            @answer="recordAnswer"
-            @next="nextQuestion"
-          />
           <PersonalityQuestion
-            v-else-if="currentQuestion.section === 'personality'"
+            v-if="currentQuestion.section === 'personality'"
             :key="currentQuestion.id"
             :question="currentQuestion"
             @answer="recordAnswer"
@@ -55,7 +48,6 @@
       v-if="screen === 'result'"
       ref="resultPageRef"
       :personality="resultPersonality"
-      :stance-choices="resultStanceChoices"
       :taste-openness="resultTasteOpenness"
       :dimension-display="resultDimensionDisplay"
       :flexibility-modifier="resultFlexibilityModifier"
@@ -87,7 +79,6 @@ import { calculateScores, getPersonalityKey, getDimensionPercentages, getFlexibi
 import LandingPage from './components/LandingPage.vue'
 import ProgressBar from './components/ProgressBar.vue'
 import SectionIntro from './components/SectionIntro.vue'
-import StanceQuestion from './components/StanceQuestion.vue'
 import PersonalityQuestion from './components/PersonalityQuestion.vue'
 import InspirationQuestion from './components/InspirationQuestion.vue'
 import ResultPage from './components/ResultPage.vue'
@@ -102,8 +93,18 @@ const wechatImageSrc = ref('')
 
 const isWeChat = /MicroMessenger/i.test(navigator.userAgent)
 
-// Section boundaries
-const sectionBreaks = { 0: 'stance', 5: 'personality', 17: 'inspiration' }
+// Section boundaries: dynamically computed from questions data
+const sectionBreaks = (() => {
+  const breaks = {}
+  let prevSection = null
+  for (let i = 0; i < questions.length; i++) {
+    if (questions[i].section !== prevSection) {
+      breaks[i] = questions[i].section
+      prevSection = questions[i].section
+    }
+  }
+  return breaks
+})()
 
 const currentQuestion = computed(() => questions[currentIndex.value])
 const currentSectionLabel = computed(() => {
@@ -117,7 +118,6 @@ const currentSectionInfo = computed(() => {
 
 // Result data
 const resultPersonality = ref(null)
-const resultStanceChoices = ref([])
 const resultTasteOpenness = ref(0)
 const resultDimensionDisplay = ref([])
 const resultFlexibilityModifier = ref(null)
@@ -161,14 +161,6 @@ function showResult() {
     resultPersonality.value = personality
     resultTasteOpenness.value = scores.tasteOpenness
     resultFlexibilityModifier.value = getFlexibilityModifier(scores.flexibilityRate)
-
-    // Build stance choices display
-    resultStanceChoices.value = scores.stanceChoices.map(sc => ({
-      questionId: sc.questionId,
-      topic: sc.topic,
-      chosenText: sc.chosenOption.text,
-      fakeStat: sc.chosenOption.fakeStat
-    }))
 
     resultDimensionDisplay.value = getDimensionPercentages(scores.dimensions)
 

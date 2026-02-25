@@ -205,8 +205,8 @@ export const personalities = {
     documentaryMoment:
       "《风味人间》S1E1 新疆哈萨克牧民白水煮羊撒粗盐——相信食材本身的力量，不需要修饰",
     celebrity: {
-      name: "陆羽",
-      quote: "独自研究茶道，著《茶经》",
+      name: "林洪",
+      quote: "著《山家清供》，以山野素食为至味",
     },
     bestMatch: "至味知味",
     clashMatch: "江湖老灶",
